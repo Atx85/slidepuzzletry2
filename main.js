@@ -1,4 +1,4 @@
-var astar = (function(window){
+var astar = (function(){
     var rows = 3, cols = 3;
     var openSet = [], closedSet = [];
 
@@ -47,11 +47,19 @@ var astar = (function(window){
         this.neighbors = [];
 
         this.getNeighbors = function() {
-            let x = this.getPos().x;
-            let y = this.getPos().y;
+            let y = this.getPos().x;
+            let x = this.getPos().y;
             let state = this.state;
-            if( x < rows - 1) {
 
+            // var s = this.shift(x,y, state, 'right');
+            // console.log( s );
+            // var t = new Spot( s );
+            // console.table(t.state);
+            // console.log(t.getPos().x, t.getPos().y);
+            // s = this.shift(t.getPos().y, t.getPos().x, t.state, 'right');
+            // console.log( s );
+
+            if( x < rows - 1) {
                 this.neighbors.push( new Spot( this.shift(x,y, state, 'right') ) );
             }
             if( x > 0) {
@@ -74,33 +82,46 @@ var astar = (function(window){
             }
 
             lp(cols,rows, (i,j) => { state[i][j] = s[i][j]; } );
-            
+            console.log('state before');
             switch (nextPos) {
                 case 'left': {
-                    let temp = state[x-1][y];
-                    state[x-1][y] = 'e';
-                    state[x][y] = temp;
+                    console.table(state);
+                    console.log('left');
+                    let temp = state[y][x-1];
+                    state[y][x-1] = 'e';
+                    state[y][x] = temp;
+                    console.table(state);
                     return state;
                     break;
                 }
                 case 'right': {
-                    let temp = state[x+1][y];
-                    state[x+1][y] = 'e';
-                    state[x][y] = temp;
+                    console.table(state);
+                    console.log('right');
+                    let temp = state[y][x+1];
+                    state[y][x+1] = 'e';
+                    state[y][x] = temp;
+                    console.table(state);
                     return state;
                     break;
                 }
                 case 'up': {
-                    let temp = state[x][y-1];
-                    state[x][y-1] = 'e';
-                    state[x][y] = temp;
+                    console.table(state);
+                    console.log('up');
+                    let temp = state[y-1][x];
+                    state[y-1][x] = 'e';
+                    state[y][x] = temp;
+                    console.table(state);
                     return state;
                     break;
                 }
                 case 'down': {
-                    let temp = state[x][y+1];
-                    state[x][y+1] = 'e';
-                    state[x][y] = temp;
+                    console.table(state);
+                    console.log('down');
+                    let temp = state[y+1][x];
+                    state[y+1][x] = 'e';
+                    state[y][x] = temp;
+                    // console.log(state);
+                    console.table(state);
                     return state;
                     break;
                 }
@@ -190,14 +211,13 @@ var astar = (function(window){
                 return;
             }
             
-            console.log(openSet.length, 'openset length')
             removeFromArray( openSet, current );
-            console.log(openSet.length, 'openset');
             closedSet.push( current ); 
 
             var neighbors = current.getNeighbors();
             for(let i = 0; i < neighbors.length; i++) {
                 neighbor = neighbors[i];
+                // console.table(neighbor.state);
                 // console.log(closedSet, neighbor, findSpot(closedSet, neighbor) );
                 // if( !closedSet.includes(neighbor) ) {
                 if( findSpot(closedSet, neighbor) === false ) {
@@ -226,6 +246,6 @@ var astar = (function(window){
     return {
         run : run
     }
-})(window);
+})();
 
 astar.run();
