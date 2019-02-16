@@ -197,9 +197,7 @@ var astar = (function(){
             }
 
             var current = openSet[winner];
-            console.log('current f', current.f );
-            console.table(current.state);
-            console.table(end.state);
+
             if( isArraysEqual( openSet[winner].state, end.state ) ) {
                 console.log( 'done' ) ;
                 //find the path
@@ -210,7 +208,7 @@ var astar = (function(){
                     path.push(temp.previous);
                     temp = temp.previous;
                 }
-                return;
+                return path;
             }
             
             removeFromArray( openSet, current );
@@ -219,9 +217,7 @@ var astar = (function(){
             var neighbors = current.getNeighbors();
             for(let i = 0; i < neighbors.length; i++) {
                 neighbor = neighbors[i];
-                // console.log('neighbour f', neighbor.f );
-                // console.table(neighbor.state);
-                // console.log(closedSet, neighbor, findSpot(closedSet, neighbor) );
+
                 // if( !closedSet.includes(neighbor) ) {
                 if( findSpot(closedSet, neighbor) === false ) {
                     var tempG = current.g + 1;
@@ -239,9 +235,6 @@ var astar = (function(){
                     // neighbor.h = heuristic(neighbor, end);
                     neighbor.f = neighbor.g + neighbor.getH();
                     neighbor.previous = current;
-                    console.log('neighbor f',neighbor.f);
-
-                    // console.table(neighbor.previous.state);
                 } 
             }
         }
@@ -252,4 +245,8 @@ var astar = (function(){
     }
 })();
 
-astar.run();
+var path = astar.run();
+for(let i = path.length-1; i>=0; i--) {
+    
+    console.table(path[i].state);    
+}
