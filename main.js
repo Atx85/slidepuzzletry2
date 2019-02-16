@@ -82,46 +82,46 @@ var astar = (function(){
             }
 
             lp(cols,rows, (i,j) => { state[i][j] = s[i][j]; } );
-            console.log('state before');
+            // console.log('state before');
             switch (nextPos) {
                 case 'left': {
-                    console.table(state);
-                    console.log('left');
+                    // console.table(state);
+                    // console.log('left');
                     let temp = state[y][x-1];
                     state[y][x-1] = 'e';
                     state[y][x] = temp;
-                    console.table(state);
+                    // console.table(state);
                     return state;
                     break;
                 }
                 case 'right': {
-                    console.table(state);
-                    console.log('right');
+                    // console.table(state);
+                    // console.log('right');
                     let temp = state[y][x+1];
                     state[y][x+1] = 'e';
                     state[y][x] = temp;
-                    console.table(state);
+                    // console.table(state);
                     return state;
                     break;
                 }
                 case 'up': {
-                    console.table(state);
-                    console.log('up');
+                    // console.table(state);
+                    // console.log('up');
                     let temp = state[y-1][x];
                     state[y-1][x] = 'e';
                     state[y][x] = temp;
-                    console.table(state);
+                    // console.table(state);
                     return state;
                     break;
                 }
                 case 'down': {
-                    console.table(state);
-                    console.log('down');
+                    // console.table(state);
+                    // console.log('down');
                     let temp = state[y+1][x];
                     state[y+1][x] = 'e';
                     state[y][x] = temp;
                     // console.log(state);
-                    console.table(state);
+                    // console.table(state);
                     return state;
                     break;
                 }
@@ -180,14 +180,14 @@ var astar = (function(){
 
 
     function run() {
-        var start = new Spot([['e',3,5],[5,7,8],[1,2,4]]);
-        var end = new Spot([1,2,3],[4,5,6],[7,8,'e']);
+        var start = new Spot([[1,2,3],['e',5,6],[4,7,8]]);
+        var end =   new Spot([[1,2,3],[4,5,6],[7,8,'e']]);
         openSet.push(start);
         // console.log(start, isArraysEqual(start.state, end.state ) );
         var counter = 0;
-        while( openSet.length > 0 && counter < 3 ) {
+        while( openSet.length > 0 && counter < 100 ) {
             counter++;
-            console.log(counter, openSet.length, closedSet.length);
+            console.log(counter,'OpenSet:', openSet.length,'ClosedSet:', closedSet.length);
             var winner = 0;
 
             for( var i = 0; i < openSet.length; i++) {
@@ -197,7 +197,9 @@ var astar = (function(){
             }
 
             var current = openSet[winner];
-
+            console.log('current f', current.f );
+            console.table(current.state);
+            console.table(end.state);
             if( isArraysEqual( openSet[winner].state, end.state ) ) {
                 console.log( 'done' ) ;
                 //find the path
@@ -217,6 +219,7 @@ var astar = (function(){
             var neighbors = current.getNeighbors();
             for(let i = 0; i < neighbors.length; i++) {
                 neighbor = neighbors[i];
+                // console.log('neighbour f', neighbor.f );
                 // console.table(neighbor.state);
                 // console.log(closedSet, neighbor, findSpot(closedSet, neighbor) );
                 // if( !closedSet.includes(neighbor) ) {
@@ -236,6 +239,7 @@ var astar = (function(){
                     // neighbor.h = heuristic(neighbor, end);
                     neighbor.f = neighbor.g + neighbor.getH();
                     neighbor.previous = current;
+                    console.log('neighbor f',neighbor.f);
 
                     // console.table(neighbor.previous.state);
                 } 
