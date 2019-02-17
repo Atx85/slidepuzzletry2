@@ -246,7 +246,29 @@ var astar = (function(){
 })();
 
 var path = astar.run();
+var anisteps = [];
 for(let i = path.length-1; i>=0; i--) {
     
-    console.table(path[i].state);    
+    console.table(path[i].state);
 }
+
+for(let i = 0; i < path.length; i++) {
+    anisteps.push( path[i].state);    
+    
+}
+
+function setup() {
+    table = new TableGraph(anisteps.pop());
+}
+
+function draw() {
+  
+  ctx.clearRect(0,0,width, height);
+  table.show();
+  table.followPath(anisteps);
+//   console.log(anisteps);
+  window.requestAnimationFrame(draw);
+}
+
+setup();
+draw();
